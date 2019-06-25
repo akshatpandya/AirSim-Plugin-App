@@ -39,6 +39,7 @@ HEADERS += \
     mavlinkparser.h \
     rpcclient.h \
     tcpserver.h \
+    joystick.h
 
 SOURCES += \
     connectionmanager.cpp \
@@ -47,6 +48,7 @@ SOURCES += \
     mavlinkparser.cpp \
     rpcclient.cpp \
     tcpserver.cpp \
+    joystick.cpp
 
 
 

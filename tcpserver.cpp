@@ -372,8 +372,7 @@ void TCPServer::sendLand(mavlink_command_long_t command_msg)
     qDebug() << "Landing.....";
     sendCommandAck(command_msg.command);
     rpc_client->land(100);
-    disarm(command_msg);
-    HB_CUSTOM_MODE = 4;
+    LAND_PROGRESS = true;
 }
 
 void TCPServer::land(mavlink_set_mode_t set_mode_msg)
@@ -398,7 +397,7 @@ void TCPServer::manualControl(mavlink_manual_control_t manual_control_msg)
     qDebug() << "Roll: " << manual_control_msg.y;
     qDebug() << "Thrust: " << manual_control_msg.z;
     qDebug() << "Yaw: " << manual_control_msg.r;
-    if(abs(manual_control_msg.x)<=10 && abs(manual_control_msg.y)<=10 && abs(manual_control_msg.z - 500)<=10 && abs(manual_control_msg.r)<=10 && LAND_PROGRESS == false)
+    if(abs(manual_control_msg.x)<=10 && abs(manual_control_msg.y)<=10 && abs(manual_control_msg.z - 500)<=10 && abs(manual_control_msg.r)<=10)
     {
         JOYSTICK_CONTROL = false;
     }
@@ -416,6 +415,7 @@ void TCPServer::manualControl(mavlink_manual_control_t manual_control_msg)
         joystick_packet.is_initialized = true;
         joystick_packet.is_valid = true;
         rpc_client->moveByRC(joystick_packet);
+//        rpc_client->moveByRCYaw(joystick_packet);
     }
 
 }

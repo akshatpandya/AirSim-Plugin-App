@@ -13,6 +13,8 @@ RPCclient::RPCclient()
         qDebug() << "Enabling API control.....";
         client.enableApiControl(true);
     }
+
+//    joystick_manager = new joystick(&client);
 }
 
 void RPCclient::arm_disarm(bool arm)
@@ -30,41 +32,14 @@ void RPCclient::takeOff(float time_out)
 
 void RPCclient::moveByRC(RCData& rc_data)
 {
-//    client.moveByRC(rc_data);
-    YawMode yaw_mode;
-    yaw_mode.is_rate = true;
-//    if(rc_data.pitch > 0.9)
-//        client.moveByVelocityAsync(5, 0, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-//    else if(rc_data.pitch < -0.9)
-//        client.moveByVelocityAsync(-5, 0, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-//    else if(abs(rc_data.pitch) <= 0.9)
-//        client.moveByVelocityAsync(0, 0, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
+//    client.moveByVelocityAsync(rc_data.pitch*5, rc_data.roll*5, rc_data.throttle*5, 0.5, DrivetrainType::MaxDegreeOfFreedom, yaw_mode);
+//    client.rotateByYawRateAsync(rc_data.yaw*50, 0.5);
+    joystick_manager.move(rc_data, &client);
+}
 
-//    if(rc_data.roll > 0.9)
-//        client.moveByVelocityAsync(0, 5, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-//    else if(rc_data.roll < -0.9)
-//        client.moveByVelocityAsync(0, -5, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-//    else if(abs(rc_data.roll <= 0.9))
-//        client.moveByVelocityAsync(0, 0, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-
-//    if(rc_data.throttle > 0.9)
-//        client.moveByVelocityAsync(0, 0, 5, 1, DrivetrainType::MaxDegreeOfFreedom);
-//    else if(rc_data.throttle < -0.9)
-//        client.moveByVelocityAsync(0, 0, -5, 1, DrivetrainType::MaxDegreeOfFreedom);
-//    else if(abs(rc_data.throttle <= 0.9))
-//        client.moveByVelocityAsync(0, 0, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-
-//    if(rc_data.yaw > 0.9)
-//        client.rotateByYawRateAsync(rc_data.yaw*10, 1);
-//    else if(rc_data.yaw < -0.9)
-//        client.rotateByYawRateAsync(-rc_data.yaw*10, 1);
-//    else if(abs(rc_data.yaw <= 0.9))
-//        client.rotateByYawRateAsync(0, 1);
-
-    client.moveByVelocityAsync(rc_data.pitch*5, 0, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-    client.moveByVelocityAsync(0, rc_data.roll*5, 0, 1, DrivetrainType::MaxDegreeOfFreedom);
-    client.moveByVelocityAsync(0, 0, rc_data.throttle*5, 1, DrivetrainType::MaxDegreeOfFreedom);
-    client.rotateByYawRateAsync(rc_data.yaw*50, 1);
+void RPCclient::moveByRCYaw(RCData &rc_data)
+{
+    client.rotateByYawRateAsync(rc_data.yaw*50, 0.5);
 }
 
 void RPCclient::land(float time_out)

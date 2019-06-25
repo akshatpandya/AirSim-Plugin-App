@@ -11,12 +11,11 @@ STRICT_MODE_ON
 
 
 #include "../AirSim/AirLib/include/vehicles/multirotor/api/MultirotorRpcLibClient.hpp"
+#include "joystick.h"
 #include <QObject>
 #include <QDebug>
 
 using namespace msr::airlib;
-
-//basic_string("127.0.0.1",char,const T*)
 
 class RPCclient : public QObject
 {
@@ -27,12 +26,13 @@ public:
     void takeOff(float time_out);
     void land(float time_out);
     void moveByRC(RCData& rc_data);
+    void moveByRCYaw(RCData& rc_data);
     void disconnect();
     MultirotorState getMultirotorState();
 
 private:
     MultirotorRpcLibClient client;
-
+    joystick joystick_manager;
 };
 
 #endif // RPCCLIENT_H
